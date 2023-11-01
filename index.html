@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des utilisateurs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e6f7ff; /* Couleur de fond bleu clair */
+        }
+
+        .flash {
+            margin-top: 10px;
+            color: red; /* Couleur des messages d'erreur */
+        }
+
+        .success {
+            color: green; /* Couleur des messages de validation */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Liste des utilisateurs</h1>
+        <ul class="list-group">
+            {% for user in users %}
+                <li class="list-group-item">{{ user.first_name }} {{ user.last_name }} - {{ user.email }} - {{ user.birthdate }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2 class="mt-4">Ajouter un utilisateur</h2>
+        <form method="POST" action="{{ url_for('add_user') }}">
+            <div class="form-group">
+                <input type="text" name="first_name" class="form-control" placeholder="Prénom" style="width: 500px;" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="last_name" class="form-control" placeholder="Nom" style="width: 500px;" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" class="form-control" placeholder="Adresse e-mail" style="width: 500px;" required>
+            </div>
+            <div class="form-group">
+                <input type="date" name="birthdate" class="form-control" style="width: 500px;" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+        </form>
+<br>
+    {% for message in get_flashed_messages() %}
+        <li class="
+            {% if 'existe' in message %}flash{% endif %}
+            {% if 'succès' in message %}success{% endif %}">
+            {{ message }}
+        </li>
+    {% endfor %}
+    </div>
+</body>
+</html>
