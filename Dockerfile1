@@ -1,0 +1,23 @@
+# Utilisez une image de base qui contient à la fois Python et MySQL
+FROM python:3.8 as web
+
+# Installez les dépendances Python
+RUN pip install Flask Flask-SQLAlchemy mysql-connector-python
+
+# Exposez le port pour l'application Flask
+EXPOSE 5000
+
+# Créez un répertoire de travail
+WORKDIR /app1
+RUN git clone https://github.com/vishnubob/wait-for-it .
+RUN chmod +x wait-for-it.sh
+# Copiez les fichiers de l'application dans le conteneur
+COPY . /app1
+
+RUN pip install -r requirements.txt
+
+# Configuration MySQL
+ENV MYSQL_ROOT_PASSWORD=root_password
+ENV MYSQL_DATABASE=my_database
+# Commande pour attendre que la base de données MySQL soit prête en utilisant wait-for-it.sh puis exécuter l'application Flask et lancer la base de données MySQL
+CMD ./wait-for-it.sh database:3306 -- python app.py
